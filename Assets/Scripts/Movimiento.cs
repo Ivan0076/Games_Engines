@@ -22,6 +22,9 @@ public class Movimiento : MonoBehaviour
     private bool isRunning = false;
     private bool canRun = true;
 
+    private PoderesJugador poderesJugador;
+    public float dashForce = 10f;
+
     public Slider staminaBar; // Asigna el slider desde el inspector
 
     void OnEnable()
@@ -37,8 +40,9 @@ public class Movimiento : MonoBehaviour
     void Awake()
     {
         playerMove = InputActions.FindAction("Move");
-        playerRun = InputActions.FindAction("Sprint"); // Asegúrate de tener esta acción en el Input System
+        playerRun = InputActions.FindAction("Sprint"); 
         currentStamina = maxStamina;
+        poderesJugador = GetComponent<PoderesJugador>();
     }
 
     void Update()
@@ -83,6 +87,10 @@ public class Movimiento : MonoBehaviour
             staminaBar.value = currentStamina;
         }
 
+        if (Input.GetKeyDown(KeyCode.Space) && poderesJugador.tieneDash)
+        {
+            rb.AddForce(transform.forward * dashForce, ForceMode.Impulse);
+        }
     }
 
     void RecuperarEstamina()
@@ -90,4 +98,6 @@ public class Movimiento : MonoBehaviour
         canRun = true;
         currentStamina = maxStamina;
     }
+
+
 }
