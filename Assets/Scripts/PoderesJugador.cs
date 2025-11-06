@@ -1,54 +1,22 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
 
-
 public class PoderesJugador : MonoBehaviour
-{ 
-    public enum PoderActivo
-    {
-        Ninguno,
-        Dash,
-        Invisibilidad,
-        Intangibilidad
-    }
-
-    public PoderActivo poderSeleccionado = PoderActivo.Ninguno;
+{
     public bool tieneDash = false;
-    public bool esIntangible = false;
-    public bool esInvisible = false;
+    public bool tieneInvisibilidad = false;
+    public bool tieneIntangibilidad = false;
 
     public float duracionIntangibilidad = 5f;
     public float duracionInvisibilidad = 5f;
 
+    public PoderActivo poderSeleccionado = PoderActivo.Ninguno;
+
     private Renderer playerRenderer;
     private Collider playerCollider;
-    void Update()
-    {
-        // Selección de poder
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            poderSeleccionado = PoderActivo.Dash;
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-            poderSeleccionado = PoderActivo.Invisibilidad;
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-            poderSeleccionado = PoderActivo.Intangibilidad;
 
-        // Activación del poder seleccionado
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            switch (poderSeleccionado)
-            {
-                case PoderActivo.Dash:
-                    ActivarDash();
-                    break;
-                case PoderActivo.Invisibilidad:
-                    ActivarInvisibilidad();
-                    break;
-                case PoderActivo.Intangibilidad:
-                    ActivarIntangibilidad();
-                    break;
-            }
-        }
-    }
+    private bool intangibilidadActiva = false;
+    private bool invisibilidadActiva = false;
 
     void Start()
     {
@@ -58,36 +26,46 @@ public class PoderesJugador : MonoBehaviour
 
     public void ActivarDash()
     {
-        tieneDash = true;
-        // Aquí puedes activar una animación 
+        Debug.Log("Dash activado");
+        // El dash se activa desde Movimiento.cs con fuerza fÃ­sica
     }
 
     public void ActivarIntangibilidad()
     {
-        esIntangible = true;
-        StartCoroutine(DesactivarIntangibilidad());
+        if (!intangibilidadActiva)
+        {
+            intangibilidadActiva = true;
+            StartCoroutine(DesactivarIntangibilidad());
+        }
     }
 
     IEnumerator DesactivarIntangibilidad()
     {
+        Debug.Log("Intangibilidad activada");
         yield return new WaitForSeconds(duracionIntangibilidad);
-        esIntangible = false;
+        intangibilidadActiva = false;
+        Debug.Log("Intangibilidad terminada");
     }
 
     public void ActivarInvisibilidad()
     {
-        esInvisible = true;
-        if (playerRenderer != null)
-            playerRenderer.enabled = false;
+        if (!invisibilidadActiva)
+        {
+            invisibilidadActiva = true;
+            if (playerRenderer != null)
+                playerRenderer.enabled = false;
 
-        StartCoroutine(DesactivarInvisibilidad());
+            StartCoroutine(DesactivarInvisibilidad());
+        }
     }
 
     IEnumerator DesactivarInvisibilidad()
     {
+        Debug.Log("Invisibilidad activada");
         yield return new WaitForSeconds(duracionInvisibilidad);
-        esInvisible = false;
+        invisibilidadActiva = false;
         if (playerRenderer != null)
             playerRenderer.enabled = true;
+        Debug.Log("Invisibilidad terminada");
     }
 }

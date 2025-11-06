@@ -1,10 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem;
+
 
 public class InteraccionPoder : MonoBehaviour
 {
-    public TipoPoder poder;
+    public InputActionAsset InputActions;
+    private InputAction interactuar;
+
+
+    public PoderActivo poder;
     public GameObject panelConfirmacion;
     public TMP_Text textoDescripcion; // Asigna el texto del panel desde el inspector
     public Button botonAceptar;
@@ -13,6 +19,22 @@ public class InteraccionPoder : MonoBehaviour
     private bool jugadorCerca = false;
     private bool yaInteractuado = false;
     private PoderesJugador jugador;
+
+    void Awake()
+    {
+        interactuar = InputActions.FindAction("Interact");
+    }
+
+    void OnEnable()
+    {
+        InputActions.Enable();
+    }
+
+    void OnDisable()
+    {
+        InputActions.Disable();
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -33,13 +55,14 @@ public class InteraccionPoder : MonoBehaviour
         }
     }
 
-    private void Update()
+    void Update()
     {
-        if (jugadorCerca && !yaInteractuado && Input.GetKeyDown(KeyCode.E))
+        if (jugadorCerca && !yaInteractuado && interactuar.WasPressedThisFrame())
         {
             MostrarPanel();
         }
     }
+
 
     void MostrarPanel()
     {
@@ -54,11 +77,11 @@ public class InteraccionPoder : MonoBehaviour
     {
         switch (poder)
         {
-            case TipoPoder.Dash:
+            case PoderActivo.Dash:
                 return "¿Quieres obtener el poder de Dash? Te permitirá moverte rápidamente por el mapa.";
-            case TipoPoder.Intangibilidad:
+            case PoderActivo.Intangibilidad:
                 return "¿Quieres ser intangible? Podrás atravesar ciertas paredes y evitar enemigos.";
-            case TipoPoder.Invisibilidad:
+            case PoderActivo.Invisibilidad:
                 return "¿Quieres volverte invisible? Los enemigos no podrán verte por un tiempo.";
             default:
                 return "¿Quieres aceptar este poder?";
@@ -69,19 +92,20 @@ public class InteraccionPoder : MonoBehaviour
     {
         switch (poder)
         {
-            case TipoPoder.Dash:
-                jugador.ActivarDash();
+            case PoderActivo.Dash:
+                jugador.tieneDash = true;
                 break;
-            case TipoPoder.Intangibilidad:
-                jugador.ActivarIntangibilidad();
+            case PoderActivo.Intangibilidad:
+                jugador.tieneIntangibilidad = true;
                 break;
-            case TipoPoder.Invisibilidad:
-                jugador.ActivarInvisibilidad();
+            case PoderActivo.Invisibilidad:
+                jugador.tieneInvisibilidad = true;
                 break;
         }
 
         FinalizarInteraccion();
     }
+
 
     void RechazarPoder()
     {

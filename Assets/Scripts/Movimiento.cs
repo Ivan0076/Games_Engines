@@ -1,7 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI; 
-
+using UnityEngine.UI;
 
 public class Movimiento : MonoBehaviour
 {
@@ -9,23 +8,24 @@ public class Movimiento : MonoBehaviour
 
     InputAction playerMove;
     InputAction playerRun;
+    InputAction activarPoder;
 
     Vector2 moveInput;
 
     public Rigidbody rb;
     public float walkSpeed;
     public float runSpeed;
+    public float dashForce = 10f;
 
-    public float maxStamina; // segundos corriendo
-    public float staminaRecoveryTime; // tiempo de espera para recuperar
+    public float maxStamina;
+    public float staminaRecoveryTime;
     private float currentStamina;
     private bool isRunning = false;
     private bool canRun = true;
 
     private PoderesJugador poderesJugador;
-    public float dashForce = 10f;
 
-    public Slider staminaBar; // Asigna el slider desde el inspector
+    public Slider staminaBar;
 
     void OnEnable()
     {
@@ -40,7 +40,9 @@ public class Movimiento : MonoBehaviour
     void Awake()
     {
         playerMove = InputActions.FindAction("Move");
-        playerRun = InputActions.FindAction("Sprint"); 
+        playerRun = InputActions.FindAction("Sprint");
+        activarPoder = InputActions.FindAction("ActivarPoder"); // ← Asegúrate de tener esta acción en el Input System
+
         currentStamina = maxStamina;
         poderesJugador = GetComponent<PoderesJugador>();
     }
@@ -50,7 +52,35 @@ public class Movimiento : MonoBehaviour
         moveInput = playerMove.ReadValue<Vector2>();
         bool runPressed = playerRun.IsPressed();
 
-        // Verifica si puede correr
+        // Selección de poder con teclas alfanuméricas
+        if (Keyboard.current.zKey.wasPressedThisFrame)
+            poderesJugador.poderSeleccionado = PoderActivo.Dash;
+        else if (Keyboard.current.xKey.wasPressedThisFrame)
+            poderesJugador.poderSeleccionado = PoderActivo.Invisibilidad;
+        else if (Keyboard.current.cKey.wasPressedThisFrame)
+            poderesJugador.poderSeleccionado = PoderActivo.Intangibilidad;
+
+        // Activación del poder con Input System (Espacio)
+        if (activarPoder.WasPressedThisFrame())
+        {
+            switch (poderesJugador.poderSeleccionado)
+            {
+                case PoderActivo.Dash:
+                    if (poderesJugador.tieneDash)
+                        rb.AddForce(transform.forward * dashForce, ForceMode.Impulse);
+                    break;
+                case PoderActivo.Invisibilidad:
+                    if (poderesJugador.tieneInvisibilidad)
+                        poderesJugador.ActivarInvisibilidad();
+                    break;
+                case PoderActivo.Intangibilidad:
+                    if (poderesJugador.tieneIntangibilidad)
+                        poderesJugador.ActivarIntangibilidad();
+                    break;
+            }
+        }
+
+        // Movimiento y estamina
         if (runPressed && canRun && currentStamina > 0)
         {
             isRunning = true;
@@ -69,7 +99,7 @@ public class Movimiento : MonoBehaviour
             isRunning = false;
             if (currentStamina < maxStamina && canRun)
             {
-                currentStamina += Time.deltaTime; // recuperaci�n lenta mientras camina
+                currentStamina += Time.deltaTime;
                 currentStamina = Mathf.Min(currentStamina, maxStamina);
             }
         }
@@ -86,11 +116,6 @@ public class Movimiento : MonoBehaviour
         {
             staminaBar.value = currentStamina;
         }
-
-        if (Input.GetKeyDown(KeyCode.Space) && poderesJugador.tieneDash)
-        {
-            rb.AddForce(transform.forward * dashForce, ForceMode.Impulse);
-        }
     }
 
     void RecuperarEstamina()
@@ -98,6 +123,4 @@ public class Movimiento : MonoBehaviour
         canRun = true;
         currentStamina = maxStamina;
     }
-
-
 }
