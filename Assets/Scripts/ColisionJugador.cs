@@ -3,45 +3,38 @@ using UnityEngine;
 public class ColisionJugador : MonoBehaviour
 {
     private PoderesJugador poderesJugador;
+    private Collider jugadorCollider;
 
     void Awake()
     {
         poderesJugador = GetComponent<PoderesJugador>();
+        jugadorCollider = GetComponent<Collider>();
     }
 
     void Update()
     {
-        if (poderesJugador != null &&
-            poderesJugador.poderSeleccionado == PoderActivo.Intangibilidad &&
-            poderesJugador.tieneIntangibilidad)
+        if (poderesJugador != null && jugadorCollider != null)
         {
-            // Buscar todas las paredes traspasables en la escena
-            GameObject[] paredes = GameObject.FindGameObjectsWithTag("ParedTraspasable");
-
-            foreach (GameObject pared in paredes)
+            if (poderesJugador.IntangibilidadActiva)
             {
-                Collider paredCollider = pared.GetComponent<Collider>();
-                Collider jugadorCollider = GetComponent<Collider>();
+                GameObject[] paredes = GameObject.FindGameObjectsWithTag("ParedTraspasable");
 
-                if (paredCollider != null && jugadorCollider != null)
+                foreach (GameObject pared in paredes)
                 {
-                    Physics.IgnoreCollision(jugadorCollider, paredCollider, true);
+                    Collider paredCollider = pared.GetComponent<Collider>();
+                    if (paredCollider != null)
+                        Physics.IgnoreCollision(jugadorCollider, paredCollider, true);
                 }
             }
-        }
-        else
-        {
-            // Restaurar colisiones si no está activo el poder
-            GameObject[] paredes = GameObject.FindGameObjectsWithTag("ParedTraspasable");
-
-            foreach (GameObject pared in paredes)
+            else
             {
-                Collider paredCollider = pared.GetComponent<Collider>();
-                Collider jugadorCollider = GetComponent<Collider>();
+                GameObject[] paredes = GameObject.FindGameObjectsWithTag("ParedTraspasable");
 
-                if (paredCollider != null && jugadorCollider != null)
+                foreach (GameObject pared in paredes)
                 {
-                    Physics.IgnoreCollision(jugadorCollider, paredCollider, false);
+                    Collider paredCollider = pared.GetComponent<Collider>();
+                    if (paredCollider != null)
+                        Physics.IgnoreCollision(jugadorCollider, paredCollider, false);
                 }
             }
         }

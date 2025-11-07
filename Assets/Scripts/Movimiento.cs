@@ -15,6 +15,8 @@ public class Movimiento : MonoBehaviour
     public Rigidbody rb;
     public float walkSpeed;
     public float runSpeed;
+    public float dashCooldown = 3f;
+    private bool dashDisponible = true;
     public float dashForce = 10f;
 
     public float maxStamina;
@@ -66,8 +68,12 @@ public class Movimiento : MonoBehaviour
             switch (poderesJugador.poderSeleccionado)
             {
                 case PoderActivo.Dash:
-                    if (poderesJugador.tieneDash)
+                    if (poderesJugador.tieneDash && dashDisponible)
+                    {
                         rb.AddForce(transform.forward * dashForce, ForceMode.Impulse);
+                        dashDisponible = false;
+                        Invoke(nameof(ReiniciarDash), dashCooldown);
+                    }
                     break;
                 case PoderActivo.Invisibilidad:
                     if (poderesJugador.tieneInvisibilidad)
@@ -123,4 +129,10 @@ public class Movimiento : MonoBehaviour
         canRun = true;
         currentStamina = maxStamina;
     }
+    void ReiniciarDash()
+    {
+        dashDisponible = true;
+    }
+
+
 }

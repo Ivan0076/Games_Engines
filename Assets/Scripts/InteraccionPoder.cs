@@ -90,6 +90,12 @@ public class InteraccionPoder : MonoBehaviour
 
     void AceptarPoder()
     {
+        if (jugador == null)
+        {
+            Debug.LogWarning("No se encontró referencia al jugador.");
+            return;
+        }
+
         switch (poder)
         {
             case PoderActivo.Dash:
@@ -105,6 +111,7 @@ public class InteraccionPoder : MonoBehaviour
 
         FinalizarInteraccion();
     }
+
 
 
     void RechazarPoder()
