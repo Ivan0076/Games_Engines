@@ -29,6 +29,8 @@ public class Movimiento : MonoBehaviour
 
     public Slider staminaBar;
 
+    public Animator animator;
+
     void OnEnable()
     {
         InputActions.Enable();
@@ -116,6 +118,8 @@ public class Movimiento : MonoBehaviour
         if (moveInput != Vector2.zero)
         {
             transform.forward = new Vector3(moveInput.x, 0, moveInput.y);
+            animator.SetFloat("movex", moveInput.x);
+            animator.SetFloat("movey", moveInput.y);
         }
 
         if (staminaBar != null)
