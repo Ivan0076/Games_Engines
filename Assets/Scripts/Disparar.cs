@@ -31,6 +31,8 @@ public class Disparar : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale == 0) return;
+
         if (accionDisparo != null && accionDisparo.WasPressedThisFrame() && municion > 0)
         {
             DispararProyectil();

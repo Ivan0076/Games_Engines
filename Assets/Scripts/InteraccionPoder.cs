@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.InputSystem;
@@ -23,6 +23,7 @@ public class InteraccionPoder : MonoBehaviour
     void Awake()
     {
         interactuar = InputActions.FindAction("Interact");
+        interactuar.Enable(); // â† Asegura que estÃ© activa
     }
 
     void OnEnable()
@@ -66,6 +67,7 @@ public class InteraccionPoder : MonoBehaviour
 
     void MostrarPanel()
     {
+        Time.timeScale = 0;
         panelConfirmacion.SetActive(true);
         textoDescripcion.text = ObtenerTextoPoder();
 
@@ -78,13 +80,13 @@ public class InteraccionPoder : MonoBehaviour
         switch (poder)
         {
             case PoderActivo.Dash:
-                return "¿Quieres obtener el poder de Dash? Te permitirá moverte rápidamente por el mapa.";
+                return "Â¿Quieres obtener el poder de Dash? Te permitirÃ¡ moverte rÃ¡pidamente por el mapa.";
             case PoderActivo.Intangibilidad:
-                return "¿Quieres ser intangible? Podrás atravesar ciertas paredes y evitar enemigos.";
+                return "Â¿Quieres ser intangible? PodrÃ¡s atravesar ciertas paredes y evitar enemigos.";
             case PoderActivo.Invisibilidad:
-                return "¿Quieres volverte invisible? Los enemigos no podrán verte por un tiempo.";
+                return "Â¿Quieres volverte invisible? Los enemigos no podrÃ¡n verte por un tiempo.";
             default:
-                return "¿Quieres aceptar este poder?";
+                return "Â¿Quieres aceptar este poder?";
         }
     }
 
@@ -92,7 +94,7 @@ public class InteraccionPoder : MonoBehaviour
     {
         if (jugador == null)
         {
-            Debug.LogWarning("No se encontró referencia al jugador.");
+            Debug.LogWarning("No se encontrÃ³ referencia al jugador.");
             return;
         }
 
@@ -121,6 +123,7 @@ public class InteraccionPoder : MonoBehaviour
 
     void FinalizarInteraccion()
     {
+        Time.timeScale = 1;
         yaInteractuado = true;
         panelConfirmacion.SetActive(false);
         botonAceptar.onClick.RemoveListener(AceptarPoder);
