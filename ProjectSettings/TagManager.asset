@@ -7,6 +7,9 @@ TagManager:
   - ParedTraspasable
   - puntoDisparo
   - Municion
+  - Enemigo
+  - Bala
+  - PlayerInv
   layers:
   - Default
   - TransparentFX
