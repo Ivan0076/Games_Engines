@@ -10,6 +10,7 @@ TagManager:
   - Enemigo
   - Bala
   - PlayerInv
+  - Entorno
   layers:
   - Default
   - TransparentFX
