@@ -1,35 +1,16 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class PuertaDesbloqueable : MonoBehaviour
 {
     private bool jugadorCerca = false;
-    private bool puertaAbierta = false;
     private JugadorLlave jugadorLlave;
-
-    public GameObject puertaVisual;
-    public InputActionAsset inputActions;
     private InputAction interactuar;
-
-    void Awake()
-    {
-        interactuar = inputActions.FindAction("Interact");
-    }
-
-    void OnEnable()
-    {
-        inputActions.Enable();
-    }
-
-    void OnDisable()
-    {
-        inputActions.Disable();
-    }
 
     void Update()
     {
-        if (jugadorCerca && !puertaAbierta && interactuar != null && interactuar.WasPressedThisFrame())
+        if (jugadorCerca && interactuar != null && interactuar.WasPressedThisFrame())
         {
             if (jugadorLlave != null && jugadorLlave.tieneLlave)
             {
@@ -37,40 +18,33 @@ public class PuertaDesbloqueable : MonoBehaviour
             }
             else
             {
-                Debug.Log("La puerta est· cerrada. Necesitas una llave.");
+                Debug.Log("La puerta est√° cerrada. Necesitas una llave.");
             }
+        }
+    }
+
+    public void SetJugadorCerca(bool cerca, JugadorLlave llave, PlayerInput playerInput)
+    {
+        jugadorCerca = cerca;
+        jugadorLlave = cerca ? llave : null;
+
+        if (cerca && playerInput != null)
+        {
+            interactuar = playerInput.actions["Interact"];
+            interactuar.Enable(); // ‚Üê habilita la acci√≥n para que WasPressedThisFrame funcione
+            Debug.Log("Acci√≥n Interact conectada y habilitada");
+        }
+        else
+        {
+            if (interactuar != null)
+                interactuar.Disable(); // ‚Üê deshabilita cuando el jugador se aleja
+            interactuar = null;
         }
     }
 
     void AbrirPuerta()
     {
-        puertaAbierta = true;
-
-        if (puertaVisual != null)
-            puertaVisual.SetActive(false); // Desactiva el modelo visual
-
-        Collider col = GetComponent<Collider>();
-        if (col != null)
-            col.enabled = false; // Desactiva colisiÛn fÌsica
-
-        Debug.Log("°Puerta desbloqueada!");
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            jugadorCerca = true;
-            jugadorLlave = other.GetComponent<JugadorLlave>();
-        }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            jugadorCerca = false;
-            jugadorLlave = null;
-        }
+        Debug.Log("¬°Puerta desbloqueada y destruida!");
+        Destroy(gameObject);
     }
 }
