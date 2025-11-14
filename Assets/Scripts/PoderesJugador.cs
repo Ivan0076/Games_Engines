@@ -7,8 +7,8 @@ public class PoderesJugador : MonoBehaviour
     public bool tieneInvisibilidad = false;
     public bool tieneIntangibilidad = false;
 
-    public float duracionIntangibilidad = 5f;
-    public float duracionInvisibilidad = 5f;
+    public float duracionIntangibilidad = 3f;
+    public float duracionInvisibilidad = 3f;
 
     public float cooldownIntangibilidad = 5f;
     private bool puedeUsarIntangibilidad = true;

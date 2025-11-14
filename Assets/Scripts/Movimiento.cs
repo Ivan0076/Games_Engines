@@ -45,7 +45,7 @@ public class Movimiento : MonoBehaviour
     {
         playerMove = InputActions.FindAction("Move");
         playerRun = InputActions.FindAction("Sprint");
-        activarPoder = InputActions.FindAction("ActivarPoder"); // ← Asegúrate de tener esta acción en el Input System
+        activarPoder = InputActions.FindAction("ActivarPoder");
 
         currentStamina = maxStamina;
         poderesJugador = GetComponent<PoderesJugador>();
@@ -56,7 +56,7 @@ public class Movimiento : MonoBehaviour
         moveInput = playerMove.ReadValue<Vector2>();
         bool runPressed = playerRun.IsPressed();
 
-        // Selección de poder con teclas alfanuméricas
+        // Selección de poder
         if (Keyboard.current.zKey.wasPressedThisFrame)
             poderesJugador.poderSeleccionado = PoderActivo.Dash;
         else if (Keyboard.current.xKey.wasPressedThisFrame)
@@ -64,7 +64,7 @@ public class Movimiento : MonoBehaviour
         else if (Keyboard.current.cKey.wasPressedThisFrame)
             poderesJugador.poderSeleccionado = PoderActivo.Intangibilidad;
 
-        // Activación del poder con Input System (Espacio)
+        // Activación del poder con Espacio
         if (activarPoder.WasPressedThisFrame())
         {
             switch (poderesJugador.poderSeleccionado)
@@ -137,6 +137,4 @@ public class Movimiento : MonoBehaviour
     {
         dashDisponible = true;
     }
-
-
 }

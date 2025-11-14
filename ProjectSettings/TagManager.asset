@@ -11,6 +11,7 @@ TagManager:
   - Bala
   - PlayerInv
   - Entorno
+  - Vida
   layers:
   - Default
   - TransparentFX

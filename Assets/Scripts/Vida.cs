@@ -12,7 +12,7 @@ public class Vida : MonoBehaviour
     private bool gameOver = false; //Un booleano para activar y desactivar el GameOver
 
 
-    public Slider barraVida; // Asigna el slider desde el Inspector
+    public Slider barraVida; 
 
     void Start()
     {
@@ -48,8 +48,18 @@ public class Vida : MonoBehaviour
     {
         if (other.CompareTag("Enemigo"))
         {
-            vidaActual--;
+            vidaActual = vidaActual - 5;
             Debug.Log("Vida actual: " + vidaActual);
+        }
+        else if (other.gameObject.CompareTag("Vida"))
+        {
+            vidaActual += 3;
+            Destroy(other.gameObject);
+        }
+
+        if (vidaActual > vidaMaxima)
+        {
+            vidaActual = 25;
         }
     }
     void GameOver()

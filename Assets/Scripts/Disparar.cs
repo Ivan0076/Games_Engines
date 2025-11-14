@@ -16,7 +16,7 @@ public class Disparar : MonoBehaviour
 
     void Awake()
     {
-        accionDisparo = inputActions.FindAction("Attack"); // ← Usamos la acción predefinida
+        accionDisparo = inputActions.FindAction("Attack"); 
     }
 
     void OnEnable()

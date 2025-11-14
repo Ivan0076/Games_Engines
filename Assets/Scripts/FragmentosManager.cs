@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class FragmentosManager : MonoBehaviour
@@ -6,6 +7,8 @@ public class FragmentosManager : MonoBehaviour
 
     public int fragmentosReunidos = 0;
     public int fragmentosNecesarios = 5;
+
+    public TMP_Text textoFragmentos;
 
     public GameObject salidaPrefab;
     public Transform puntoSalida;
@@ -16,6 +19,12 @@ public class FragmentosManager : MonoBehaviour
             instancia = this;
         else
             Destroy(gameObject);
+    }
+
+    public void Update()
+    {
+        if (textoFragmentos != null)
+            textoFragmentos.text = "Encuentra los Fragmentos: 5 / " + fragmentosReunidos;
     }
 
     public void AgregarFragmento()

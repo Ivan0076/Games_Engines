@@ -18,7 +18,9 @@ public class InteraccionPoder : MonoBehaviour
 
     private bool jugadorCerca = false;
     private bool yaInteractuado = false;
+    
     private PoderesJugador jugador;
+    private Vida vidaActual;
 
     void Awake()
     {
@@ -42,6 +44,8 @@ public class InteraccionPoder : MonoBehaviour
         if (yaInteractuado) return;
 
         jugador = other.GetComponent<PoderesJugador>();
+        vidaActual = other.GetComponent<Vida>();
+
         if (jugador != null)
         {
             jugadorCerca = true;
@@ -110,6 +114,13 @@ public class InteraccionPoder : MonoBehaviour
                 jugador.tieneInvisibilidad = true;
                 break;
         }
+
+        if (vidaActual != null)
+        {
+            vidaActual.vidaActual -= 5;
+            Debug.Log("Vida reducida por aceptar poder. Vida actual: " + vidaActual.vidaActual);
+        }
+
 
         FinalizarInteraccion();
     }
