@@ -1,52 +1,39 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class MovOlfateador : MonoBehaviour
+public class MovErrante : MonoBehaviour
 {
     public float rangoMovimiento = 10f;     // radio de patrulla
     public float tiempoEspera = 2f;         // tiempo que espera antes de moverse de nuevo
     public float rangoDeteccion = 8f;       // distancia para detectar al jugador
-    public float distanciaMinima = 5f;      // distancia mínima para seguir
 
     private NavMeshAgent agente;
     private float temporizador;
-    private GameObject target;
+    private Transform jugador;
 
     void Start()
     {
         agente = GetComponent<NavMeshAgent>();
-        target = GameObject.FindGameObjectWithTag("Player");
+        jugador = GameObject.FindGameObjectWithTag("Player").transform;
         temporizador = tiempoEspera;
         MoverANuevaPosicion();
     }
 
     void Update()
     {
-        // Buscar al jugador, ya sea normal o invisible
-        if (target == null || (target.tag != "Player" && target.tag != "PlayerInv"))
-        {
-            target = GameObject.FindGameObjectWithTag("Player");
+        if (jugador == null) return;
 
-            if (target == null)
-            {
-                target = GameObject.FindGameObjectWithTag("PlayerInv");
-            }
+        float distanciaJugador = Vector3.Distance(transform.position, jugador.position);
+
+        if (distanciaJugador <= rangoDeteccion)
+        {
+            // Si el jugador está cerca lo persigue
+            agente.SetDestination(jugador.position);
         }
-
-        if (target != null)
+        else
         {
-            float distanciaJugador = Vector3.Distance(transform.position, target.transform.position);
-
-            // Si el jugador está cerca (visible o invisible), seguirlo
-            if (distanciaJugador <= rangoDeteccion)
-            {
-                agente.SetDestination(target.transform.position);
-            }
-            else
-            {
-                // Si está lejos, patrullar
-                Patrullar();
-            }
+            // Si el jugador está lejos → patrullar
+            Patrullar();
         }
     }
 

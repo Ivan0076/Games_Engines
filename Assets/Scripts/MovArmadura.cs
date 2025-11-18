@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MovEnemigo : MonoBehaviour
+public class MovArmadura : MonoBehaviour
 {
     public GameObject target;
     public GameObject targetBase;
