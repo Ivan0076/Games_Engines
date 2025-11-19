@@ -60,9 +60,9 @@ public class Movimiento : MonoBehaviour
         if (Keyboard.current.zKey.wasPressedThisFrame)
             poderesJugador.poderSeleccionado = PoderActivo.Dash;
         else if (Keyboard.current.xKey.wasPressedThisFrame)
-            poderesJugador.poderSeleccionado = PoderActivo.Invisibilidad;
-        else if (Keyboard.current.cKey.wasPressedThisFrame)
             poderesJugador.poderSeleccionado = PoderActivo.Intangibilidad;
+        else if (Keyboard.current.cKey.wasPressedThisFrame)
+            poderesJugador.poderSeleccionado = PoderActivo.Invisibilidad;
 
         // Activación del poder con Espacio
         if (activarPoder.WasPressedThisFrame())
@@ -77,13 +77,13 @@ public class Movimiento : MonoBehaviour
                         Invoke(nameof(ReiniciarDash), dashCooldown);
                     }
                     break;
-                case PoderActivo.Invisibilidad:
-                    if (poderesJugador.tieneInvisibilidad)
-                        poderesJugador.ActivarInvisibilidad();
-                    break;
                 case PoderActivo.Intangibilidad:
                     if (poderesJugador.tieneIntangibilidad)
                         poderesJugador.ActivarIntangibilidad();
+                    break;
+                case PoderActivo.Invisibilidad:
+                    if (poderesJugador.tieneInvisibilidad)
+                        poderesJugador.ActivarInvisibilidad();
                     break;
             }
         }

@@ -9,6 +9,17 @@ public class Menu : MonoBehaviour
     public void IrJuego()
     {
         Time.timeScale = 1;
+
+        GameObject jugador = GameObject.FindGameObjectWithTag("Player");
+        if (jugador != null)
+        {
+            PoderesJugador poderes = jugador.GetComponent<PoderesJugador>();
+            if (poderes != null)
+            {
+                poderes.ReiniciarEstado();
+            }
+
+        }
         SceneManager.LoadScene("Depuracion");
     }
 

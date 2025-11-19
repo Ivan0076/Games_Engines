@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PoderesJugador : MonoBehaviour
 {
@@ -28,40 +29,40 @@ public class PoderesJugador : MonoBehaviour
 
     public Material materialTransparente;
     public Material materialBrillante;
-    private Material materialOriginal;
+    private Material materialOriginalJugador;
 
+    // Cache de materiales originales de paredes traspasables
+    private readonly Dictionary<Renderer, Material> paredesOriginales = new Dictionary<Renderer, Material>();
 
     void Start()
     {
         playerRenderer = GetComponentInChildren<Renderer>();
         playerCollider = GetComponent<Collider>();
-    }
-
-    public void ActivarDash()
-    {
-        Debug.Log("Dash activado");
-        // El dash se activa desde Movimiento.cs con fuerza física
+        if (playerRenderer != null)
+            materialOriginalJugador = playerRenderer.material;
     }
 
     public void ActivarIntangibilidad()
     {
-        if (!intangibilidadActiva && puedeUsarIntangibilidad)
+        if (tieneIntangibilidad && !intangibilidadActiva && puedeUsarIntangibilidad)
         {
             intangibilidadActiva = true;
             puedeUsarIntangibilidad = false;
 
-            if (playerRenderer != null)
-            {
-                materialOriginal = playerRenderer.material;
+            if (playerRenderer != null && materialTransparente != null)
                 playerRenderer.material = materialTransparente;
-            }
 
-            GameObject[] paredes = GameObject.FindGameObjectsWithTag("ParedTraspasable");
-            foreach (GameObject pared in paredes)
+            // Ilumina paredes y cachea material original de cada una
+            foreach (var pared in GameObject.FindGameObjectsWithTag("ParedTraspasable"))
             {
-                Renderer paredRenderer = pared.GetComponent<Renderer>();
-                if (paredRenderer != null)
-                    paredRenderer.material = materialBrillante;
+                var rend = pared.GetComponent<Renderer>();
+                if (rend == null) continue;
+
+                if (!paredesOriginales.ContainsKey(rend))
+                    paredesOriginales[rend] = rend.material;
+
+                if (materialBrillante != null)
+                    rend.material = materialBrillante;
             }
 
             StartCoroutine(DesactivarIntangibilidad());
@@ -75,24 +76,30 @@ public class PoderesJugador : MonoBehaviour
 
         intangibilidadActiva = false;
 
-        if (playerRenderer != null && materialOriginal != null)
-            playerRenderer.material = materialOriginal;
+        // Restaurar material del jugador
+        if (playerRenderer != null && materialOriginalJugador != null)
+            playerRenderer.material = materialOriginalJugador;
 
-        GameObject[] paredes = GameObject.FindGameObjectsWithTag("ParedTraspasable");
-        foreach (GameObject pared in paredes)
+        // Restaurar cada pared a su material original
+        foreach (var kvp in paredesOriginales)
         {
-            Renderer paredRenderer = pared.GetComponent<Renderer>();
-            if (paredRenderer != null)
-                paredRenderer.material = materialOriginal; // o guarda el original por separado si es distinto
+            var rend = kvp.Key;
+            var mat = kvp.Value;
+            if (rend != null && mat != null)
+                rend.material = mat;
         }
+        paredesOriginales.Clear();
 
         Debug.Log("Intangibilidad terminada");
-    }
 
+        // Cooldown y re-habilitación
+        yield return new WaitForSeconds(cooldownIntangibilidad);
+        puedeUsarIntangibilidad = true;
+    }
 
     public void ActivarInvisibilidad()
     {
-        if (!invisibilidadActiva && puedeUsarInvisibilidad)
+        if (tieneInvisibilidad && !invisibilidadActiva && puedeUsarInvisibilidad)
         {
             invisibilidadActiva = true;
             gameObject.tag = "PlayerInv";
@@ -112,10 +119,50 @@ public class PoderesJugador : MonoBehaviour
 
         invisibilidadActiva = false;
         gameObject.tag = "Player";
-      
+
+        if (playerRenderer != null)
+            playerRenderer.enabled = true;
 
         Debug.Log("Invisibilidad terminada");
         yield return new WaitForSeconds(cooldownInvisibilidad);
         puedeUsarInvisibilidad = true;
+    }
+
+    public void ReiniciarEstado()
+    {
+        tieneDash = false;
+        tieneIntangibilidad = false;
+        tieneInvisibilidad = false;
+        poderSeleccionado = PoderActivo.Ninguno;
+
+        intangibilidadActiva = false;
+        invisibilidadActiva = false;
+        puedeUsarIntangibilidad = true;
+        puedeUsarInvisibilidad = true;
+
+        if (playerRenderer != null)
+        {
+            playerRenderer.enabled = true;
+            if (materialOriginalJugador != null)
+                playerRenderer.material = materialOriginalJugador;
+        }
+
+        // Restaurar paredes por si quedó activado en mitad
+        foreach (var kvp in paredesOriginales)
+        {
+            var rend = kvp.Key;
+            var mat = kvp.Value;
+            if (rend != null && mat != null)
+                rend.material = mat;
+        }
+        paredesOriginales.Clear();
+
+        gameObject.tag = "Player";
+
+        var vida = GetComponent<Vida>();
+        if (vida != null)
+            vida.vidaActual = vida.vidaMaxima;
+
+        Debug.Log("Estado del jugador reiniciado.");
     }
 }
