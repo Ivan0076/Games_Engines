@@ -84,13 +84,13 @@ public class InteraccionPoder : MonoBehaviour
         switch (poder)
         {
             case PoderActivo.Dash:
-                return "¿Quieres obtener el poder de Dash? Te permitirá moverte rápidamente por el mapa.";
+                return "En este mundo puedes hacer ciertas cosas que no puedes hacer en tu mundo. Por ejemplo: tu alma aqui es mas liviana, asi que puedes ir mas rapido. ";
             case PoderActivo.Intangibilidad:
-                return "¿Quieres ser intangible? Podrás atravesar ciertas paredes y evitar enemigos.";
+                return "Tu cuerpo fisico no te acompaña del todo en este mundo, puedes utilizar esto para tu ventaja cruzando ciertas barreras o paredes.";
             case PoderActivo.Invisibilidad:
-                return "¿Quieres volverte invisible? Los enemigos no podrán verte por un tiempo.";
+                return "El tiempo pasa distinto por aqui, si te concentras en eso los enemigos no podrán verte por un tiempo...";
             default:
-                return "¿Quieres aceptar este poder?";
+                return "¿Crees poder usar este poder?";
         }
     }
 
