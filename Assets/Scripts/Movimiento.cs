@@ -49,6 +49,12 @@ public class Movimiento : MonoBehaviour
 
         currentStamina = maxStamina;
         poderesJugador = GetComponent<PoderesJugador>();
+
+        if (staminaBar != null)
+        {
+            staminaBar.maxValue = maxStamina;
+            staminaBar.value = currentStamina;
+        }
     }
 
     void Update()
