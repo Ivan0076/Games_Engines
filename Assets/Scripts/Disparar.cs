@@ -39,7 +39,7 @@ public class Disparar : MonoBehaviour
         }
 
         if (textoMunicion != null)
-            textoMunicion.text = "Munición: " + municion;
+            textoMunicion.text = "Talismanes: " + municion;
     }
 
     public void DispararProyectil()
