@@ -3,13 +3,16 @@ using UnityEngine.AI;
 
 public class MovErrante : MonoBehaviour
 {
-    public float rangoMovimiento = 10f;     // radio de patrulla
-    public float tiempoEspera = 2f;         // tiempo que espera antes de moverse de nuevo
-    public float rangoDeteccion = 8f;       // distancia para detectar al jugador
+    public float rangoMovimiento = 10f;
+    public float tiempoEspera = 2f;
+    public float rangoDeteccion = 8f;
 
     private NavMeshAgent agente;
     private float temporizador;
     private Transform jugador;
+
+    public SpriteRenderer spriteRenderer; // ← Asigna en el Inspector
+    public Animator animator;             // ← Asigna en el Inspector
 
     void Start()
     {
@@ -27,14 +30,14 @@ public class MovErrante : MonoBehaviour
 
         if (distanciaJugador <= rangoDeteccion)
         {
-            // Si el jugador está cerca lo persigue
             agente.SetDestination(jugador.position);
         }
         else
         {
-            // Si el jugador está lejos → patrullar
             Patrullar();
         }
+
+        ActualizarDireccionVisual();
     }
 
     void Patrullar()
@@ -61,4 +64,15 @@ public class MovErrante : MonoBehaviour
             agente.SetDestination(hit.position);
         }
     }
+
+    void ActualizarDireccionVisual()
+    {
+        Vector3 direccion = agente.velocity;
+
+        if (direccion.x < -0.1f)
+        {
+            animator.Play("IdleIzquierda");
+        }
+    }
+
 }

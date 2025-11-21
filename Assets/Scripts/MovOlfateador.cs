@@ -12,6 +12,9 @@ public class MovOlfateador : MonoBehaviour
     private float temporizador;
     private GameObject target;
 
+    public SpriteRenderer spriteRenderer; // ← Asigna en el Inspector
+    public Animator animator;             // ← Asigna en el Inspector
+
     void Start()
     {
         agente = GetComponent<NavMeshAgent>();
@@ -47,6 +50,8 @@ public class MovOlfateador : MonoBehaviour
                 // Si está lejos, patrullar
                 Patrullar();
             }
+
+            ActualizarDireccionVisual();
         }
     }
 
@@ -72,6 +77,16 @@ public class MovOlfateador : MonoBehaviour
         if (NavMesh.SamplePosition(puntoAleatorio, out hit, rangoMovimiento, NavMesh.AllAreas))
         {
             agente.SetDestination(hit.position);
+        }
+    }
+
+    void ActualizarDireccionVisual()
+    {
+        Vector3 direccion = agente.velocity;
+
+        if (direccion.x < -0.1f)
+        {
+            animator.Play("Caminar_Olfateador");
         }
     }
 }
