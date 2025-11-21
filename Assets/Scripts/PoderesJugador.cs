@@ -120,8 +120,7 @@ public class PoderesJugador : MonoBehaviour
         invisibilidadActiva = false;
         gameObject.tag = "Player";
 
-        if (playerRenderer != null)
-            playerRenderer.enabled = true;
+        
 
         Debug.Log("Invisibilidad terminada");
         yield return new WaitForSeconds(cooldownInvisibilidad);

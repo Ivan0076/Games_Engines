@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
 
 public class MovErrante : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class MovErrante : MonoBehaviour
 
     private NavMeshAgent agente;
     private float temporizador;
-    private Transform jugador;
+    private GameObject jugador;
 
     public SpriteRenderer spriteRenderer; // ← Asigna en el Inspector
     public Animator animator;             // ← Asigna en el Inspector
@@ -17,20 +18,28 @@ public class MovErrante : MonoBehaviour
     void Start()
     {
         agente = GetComponent<NavMeshAgent>();
-        jugador = GameObject.FindGameObjectWithTag("Player").transform;
+        jugador = GameObject.FindGameObjectWithTag("Player");
         temporizador = tiempoEspera;
         MoverANuevaPosicion();
     }
 
     void Update()
     {
-        if (jugador == null) return;
-
-        float distanciaJugador = Vector3.Distance(transform.position, jugador.position);
-
-        if (distanciaJugador <= rangoDeteccion)
+       
+        if (jugador == null ||
+        (jugador.tag == "PlayerInv"))
         {
-            agente.SetDestination(jugador.position);
+
+                Patrullar();
+            
+        }
+
+
+        float distanciaJugador = Vector3.Distance(transform.position, jugador.transform.position);
+
+        if (distanciaJugador <= rangoDeteccion && (jugador.tag=="Player"))
+        {
+            agente.SetDestination(jugador.transform.position);
         }
         else
         {

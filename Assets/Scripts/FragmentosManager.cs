@@ -24,7 +24,7 @@ public class FragmentosManager : MonoBehaviour
     public void Update()
     {
         if (textoFragmentos != null)
-            textoFragmentos.text = "Encuentra los Fragmentos: " + fragmentosReunidos + " / 5";
+            textoFragmentos.text = "Fragmentos Encontrados: " + fragmentosReunidos + " / 5";
     }
 
     public void AgregarFragmento()
