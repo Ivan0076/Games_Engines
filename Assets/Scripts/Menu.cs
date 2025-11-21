@@ -25,6 +25,8 @@ public class Menu : MonoBehaviour
 
     public void IrMenu()
     {
+        Debug.Log("IrMenu llamado desde: " + gameObject.name);
+        Time.timeScale = 1;
         SceneManager.LoadScene("Menu_Principal");
     }
 
