@@ -46,7 +46,7 @@ public class Movimiento : MonoBehaviour
         playerMove = InputActions.FindAction("Move");
         playerRun = InputActions.FindAction("Sprint");
         activarPoder = InputActions.FindAction("ActivarPoder");
-
+        animator.SetBool("caminar", false);
         currentStamina = maxStamina;
         poderesJugador = GetComponent<PoderesJugador>();
 
@@ -126,8 +126,12 @@ public class Movimiento : MonoBehaviour
             transform.forward = new Vector3(moveInput.x, 0, moveInput.y);
             animator.SetFloat("movex", moveInput.x);
             animator.SetFloat("movey", moveInput.y);
+            animator.SetBool("caminar", true);
         }
-
+        else
+        {
+            animator.SetBool("caminar", false);
+        }
         if (staminaBar != null)
         {
             staminaBar.value = currentStamina;
