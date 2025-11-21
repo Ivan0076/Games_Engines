@@ -99,9 +99,10 @@ GameObject:
   - component: {fileID: 5977745043796563179}
   - component: {fileID: 1614229471516372906}
   - component: {fileID: 2343803687917910590}
+  - component: {fileID: -3496579429397867149}
   m_Layer: 0
   m_Name: Papel
-  m_TagString: Untagged
+  m_TagString: Municion
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -190,9 +191,22 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-3496579429397867149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7658070827489018660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bbbb47e03ae48a48b4f6abb43c98ba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cantidadMunicion: 1

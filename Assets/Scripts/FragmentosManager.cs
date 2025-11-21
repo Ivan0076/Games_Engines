@@ -13,6 +13,9 @@ public class FragmentosManager : MonoBehaviour
     public GameObject salidaPrefab;
     public Transform puntoSalida;
 
+    // Referencia al panel de victoria en la escena
+    public GameObject panelVictoria;
+
     void Awake()
     {
         if (instancia == null)
@@ -21,10 +24,10 @@ public class FragmentosManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public void Update()
+    void Update()
     {
         if (textoFragmentos != null)
-            textoFragmentos.text = "Fragmentos Encontrados: " + fragmentosReunidos + " / 5";
+            textoFragmentos.text = "Fragmentos Encontrados: " + fragmentosReunidos + " / " + fragmentosNecesarios;
     }
 
     public void AgregarFragmento()
@@ -40,7 +43,15 @@ public class FragmentosManager : MonoBehaviour
 
     void ActivarSalida()
     {
-        Instantiate(salidaPrefab, puntoSalida.position, Quaternion.identity);
+        GameObject salida = Instantiate(salidaPrefab, puntoSalida.position, Quaternion.identity);
+
+        // Asignar automáticamente el panel al script de la salida
+        SalidaVictoria scriptSalida = salida.GetComponent<SalidaVictoria>();
+        if (scriptSalida != null && panelVictoria != null)
+        {
+            scriptSalida.panelVictoria = panelVictoria;
+        }
+
         Debug.Log("¡Has reunido todos los fragmentos! La salida ha aparecido.");
     }
 }
