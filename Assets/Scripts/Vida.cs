@@ -53,7 +53,7 @@ public class Vida : MonoBehaviour
         }
         else if (other.gameObject.CompareTag("Vida"))
         {
-            vidaActual += 3;
+            vidaActual += 5;
             Destroy(other.gameObject);
         }
 
